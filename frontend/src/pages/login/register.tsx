@@ -1,36 +1,43 @@
-import { useEffect } from 'react'
+import { observer } from 'mobx-react-lite'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { Link } from 'react-router-dom'
-import { FetchDataReg } from '../../res/FetchDataRegister'
+import FetchDataReg from '../../res/FetchDataRegister'
 import { schemaPassword, schemaUsername } from '../../schema/schema'
 import { modal } from '../../store/modalText'
 
  
 
-  function Register(){
-
-	const {register, handleSubmit, formState: {errors}} = useForm({'mode': 'onChange'});
+  const Register = () => {
+ 
+	const {register, handleSubmit, formState: {errors} } = useForm({'mode': 'onChange'});
 	
+  const [isLoad, setIsLoad] = useState(false);
+
 	useEffect(() => {
 			const t = setTimeout(() => {modal.isOpen=false}, 2000)
-	
+      setIsLoad(false)
+
 			return()=> clearTimeout(t);
 		}, [modal.isOpen])
 
 	return(
-	<div className="ob w-[100vw] 
-			h-[100vh] ">
-	
-			{modal.isOpen && 
-			<div className='border w-120 h-14
-			ml-10 mt-10 modal_text'>
-	
-				<p className='text-[15px]'>{modal.text}</p>
-	
-			</div>}
-	
+    <div className="ob w-[100vw] 
+		h-[100vh] ">
+
+		{modal.isOpen && 
+		<div 
+    
+    className={`border p-10
+		ml-10 mt-10 modal_text 
+    ${modal.success ? 'success' : 'success_false'}`}>
+
+			<p>{modal.text}</p>
+
+		</div>}
+
 			<div className='flex justify-center items-center w-[100%] h-200'>
-		<div className=' w-100 h-100
+    <div className=' w-100 h-100
     border border-[#444] rounded-2xl'>
 
       <h2 className='text-center
@@ -53,7 +60,7 @@ import { modal } from '../../store/modalText'
       {...register('username', schemaUsername)}/>
     </div>
     
-    {errors.username && 
+    {errors?.username?.message && 
     <p
     className='text-red-600 text-center pt-1'
     >{errors.username.message}</p>}
@@ -71,18 +78,18 @@ import { modal } from '../../store/modalText'
       {...register('password', schemaPassword)}/>
     </div>
     
-    {errors.password && 
+    {errors?.password?.message && 
     <p
     className='text-red-600 text-center pt-1'
     >{errors.password.message}</p>}
 
 
     <div className='w-[97%] mt-2 mx-auto'>
-      <Link to="/login">Login</Link>
+      <Link to="/login">login</Link> 
     </div>
 
       <div className='text-center mt-5'>
-        <button>Submit</button>
+        <button onClick={()=> setIsLoad(true) }>{isLoad ? "Loading.." :   "Submit"}</button>
       </div>
 
     </form>
@@ -92,4 +99,4 @@ import { modal } from '../../store/modalText'
 	)
  }
 
- export default Register
+ export default observer(Register) 

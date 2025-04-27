@@ -61,7 +61,7 @@ button:hover {
   align-items: center;
 }
 
-.modal_text::before {
+.modal_text::before_ {
   content: '';
   position: absolute;
   left: 0;
@@ -80,4 +80,26 @@ button:hover {
   100% {
     transform: scale(0);
   }
+}
+
+/**/
+.success {
+  width: 190px;
+  padding: 10px 0px;
+  background-color: #68ce1fa7;
+  border-radius: 15px;
+  animation: ww 0.3s ease forwards;
+}
+
+.success_false {
+  width: 200px;
+  padding: 15px 0px;
+  background-color: #e70e0e;
+  border-radius: 15px;
+  animation: ww 0.3s ease forwards;
+}
+
+@keyframes ww {
+  0% { transform: scale(0); }
+  100% { transform: scale(1); }
 }

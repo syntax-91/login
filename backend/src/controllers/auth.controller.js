@@ -1,40 +1,38 @@
-import { users } from '../server.js'
+import { addUser, LoginUser } from '../db.js'
 
- export const register = (req, res) => {
+ export const register = async (req, res) => {
 	console.log(req.body)
-	
 
+	try {
+		
+	
 	const userData = req.body; 
 	
-	const user = users.find(user => user.username === userData.username)
+	const user = await addUser(userData)
 
-	if(user) {	 
-	res.status(201)
-	.json({message: 'Уже Существует!'}) 
+		.then(e => {
+			res.json({message: e}) 
+		})
+
+
+	} finally {
+
 	}
-	
-	else {
-	res.status(200)
-	.json({message: 'Успех'})
-	users.push(userData)
-	console.log('users:', users) 
-	}
-	
  }
-  
- export const login = (req, res) => {
-	
+   
+ export const login = async(req, res) => {
+		try {
 	console.log('req data: ', req.body)
 	const userData = req.body;
 	
-	const user = users.find(user => user.username == userData.username && user.password == userData.password)
+	const user =  LoginUser(userData)
 
-	if(user){
-		res.status(200)
-		.json({message: "Успех!"})
-	} else {
-		res.status(201)
-		.json({message: "имя пользывателья или пароль неправильный!"})
+	.then(e => {
+		res.json(e) 
+	})	}
+
+	catch(err) {
+			console.log('ERROR', err)
 	}
  }
 

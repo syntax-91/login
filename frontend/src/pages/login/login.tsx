@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react-lite'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import FetchData from '../../res/fetchData'
 import { schemaPassword, schemaUsername } from '../../schema/schema'
 import { modal } from '../../store/modalText'
@@ -10,8 +10,15 @@ import { modal } from '../../store/modalText'
 	
 	const {register, handleSubmit, formState: {errors}} = useForm({'mode': 'onChange'});
 
+  const [isLoad, setIsLoad] = useState(false);
+
+  const nav = useNavigate();
+
 	useEffect(() => {
+     
 		const t = setTimeout(() => {modal.isOpen=false}, 2000)
+    
+    setIsLoad(false)
 
 		return()=> clearTimeout(t);
 	}, [modal.isOpen])
@@ -20,9 +27,11 @@ import { modal } from '../../store/modalText'
 		<div className="ob w-[100vw] 
 		h-[100vh] ">
 
+    {/* modal text */}
+
 		{modal.isOpen && 
-		<div className='border p-10
-		ml-10 mt-10 modal_text'>
+		<div className={` p-10
+		ml-10 mt-10 modal_text ${modal.success ? 'success' : 'success_false'}`}>
 
 			<p>{modal.text}</p>
 
@@ -81,7 +90,7 @@ import { modal } from '../../store/modalText'
     </div>
 
       <div className='text-center mt-5'>
-        <button>Submit</button>
+        <button onClick={()=>setIsLoad(true) }>{isLoad ? "loading..." : "Submit"}</button>
       </div>
 
     </form>
